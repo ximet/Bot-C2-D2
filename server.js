@@ -4,32 +4,24 @@ var config = require('./config.js');
 var Twitter = new twit(config);
 
 var retweet = function() {
-    var params = {
-        q: '#nodejs, #Nodejs',  // REQUIRED
+    const params = {
+        q: '#nodejs, #Nodejs',
         result_type: 'recent',
         lang: 'en'
-    }
-    Twitter.get('search/tweets', params, function(err, data) {
-      // if there no errors
-        if (!err) {
-          // grab ID of tweet to retweet
-            var retweetId = data.statuses[0].id_str;
-            // Tell TWITTER to retweet
-            Twitter.post('statuses/retweet/:id', {
-                id: retweetId
-            }, function(err, response) {
-                if (response) {
-                    console.log('Retweeted!!!');
-                }
-                // if there was an error while tweeting
-                if (err) {
-                    console.log('Something went wrong while RETWEETING... Duplication maybe...');
-                }
+    };
+    
+    Twitter.get('search/tweets', params)
+      .then( res => {
+        if (!res.data.errors) {
+            const retweetId = res.data.statuses[0].id_str;
+        
+            Twitter.post('statuses/retweet/:id', { id: retweetId })
+                .then(res => {
+                    console.log(res.response);
             });
         }
-        // if unable to Search a tweet
         else {
-          console.log('Something went wrong while SEARCHING...');
+          console.log('Error: ', res.data.errors[0].message);
         }
     });
 }
@@ -37,4 +29,4 @@ var retweet = function() {
 
 retweet();
 // retweet in every 50 minutes
-setInterval(retweet, 3000000); //every 50min
+setInterval(retweet, 3000); //every 50min
