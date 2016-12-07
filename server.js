@@ -1,9 +1,9 @@
-var twit = require('twit');
-var config = require('./config.js');
+const twit = require('twit');
+const config = require('./config.js');
 
-var Twitter = new twit(config);
+const Twitter = new twit(config);
 
-var retweet = function() {
+const retweet = function() {
     const params = {
         q: '#nodejs, #Nodejs',
         result_type: 'recent',
@@ -11,22 +11,26 @@ var retweet = function() {
     };
     
     Twitter.get('search/tweets', params)
-      .then( res => {
-        if (!res.data.errors) {
-            const retweetId = res.data.statuses[0].id_str;
+      .then( tweet => {
+        if (!tweet.data.errors) {
+            const retweetId = tweet.data.statuses[0].id_str;
         
             Twitter.post('statuses/retweet/:id', { id: retweetId })
-                .then(res => {
-                    console.log(res.response);
+                .then(item => {
+                    if(item.resp.statusCode === 200) {
+                        console.log('Retweeted');
+                    }
+                    else {
+                        console.log('Error:', item.resp.statusMessage);
+                    }
             });
         }
         else {
           console.log('Error: ', res.data.errors[0].message);
         }
     });
-}
+};
 
 
 retweet();
-// retweet in every 50 minutes
-setInterval(retweet, 3000); //every 50min
+setInterval(retweet, 300000);
