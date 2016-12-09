@@ -1,3 +1,6 @@
+const wordfilter = require('wordfilter');
+
+
 const ranDom = (arr) => {
     var index = Math.floor(Math.random()*arr.length);
     return arr[index];
@@ -10,9 +13,9 @@ const FavouriteService = {
             .then( tweet => {
                 if (!tweet.data.errors) {
                     const tweetItems = tweet.data.statuses;
-                    const randomTweet = ranDom(tweetItems);
 
-                    if (typeof randomTweet !== 'undefined') {
+                    const randomTweet = ranDom(tweetItems);
+                    if (typeof randomTweet !== 'undefined' && !wordfilter.blacklisted(randomTweet)) {
                         const retweetId = randomTweet.id_str;
 
                         TwitterInstance.post('favorites/create', { id: retweetId })
