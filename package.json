@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/ximet/retweetbot#readme",
   "dependencies": {
-    "twit": "^2.2.5",
-    "wordfilter": "^0.2.6"
+    "twit": "~2.2.5",
+    "wordfilter": "~0.2.6"
   }
 }
