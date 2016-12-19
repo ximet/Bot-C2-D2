@@ -21,7 +21,7 @@ class TemplateBot {
         return new Error();
     }
 
-    process () {
+    runTask () {
         const params = this.getParam();
 
         this.searchInTwitter(params)
