@@ -33,8 +33,6 @@ class FavouriteService extends TemplateBot {
             }
         }
 
-
-
         else {
             console.log('Error: ', res.data.errors[0].message);
         }
