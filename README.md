@@ -1,3 +1,3 @@
-# retweetbot
+# Bot C2-D2
 
-Application for retweet most popular tweet with front-end hashtags
+Bot for everyday tasks
