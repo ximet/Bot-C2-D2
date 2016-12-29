@@ -6,22 +6,53 @@ const done = () => {
     process.exit();
 };
 
+const memoryForProperty = 10;
+let isStarted = false;
+let isStopped = true;
+
+
 class CLI extends EventEmitter {
     constructor() {
         super();
-        console.log('Initialize');
-        process.stdin.resume();
-        process.stdin.setEncoding('utf8');
+
+
+        this.stdin = process.stdin;
+        this.stdout = process.stdout;
+
+        this.stdin.resume();
+        this.stdin.setEncoding('utf8');
+
+        this.startListening = this.startListening.bind(this);
+        this.stopListening = this.stopListening.bind(this);
     }
 
     startListening () {
-        console.log('listen');
-        process.stdin.on('data', function (text) {
+        if (isStarted === true) {
+            return;
+        }
+
+        this.stdin.on('data', function (text) {
             console.log('received data:', util.inspect(text));
             if (text === 'quit\n') {
-                done();
+                console.log(this);
+                this.stopListening();
             }
         });
+
+        this.emit('start');
+        isStarted = true;
+        isStopped = false;
+    }
+
+    stopListening () {
+        if (isStopped || !isStarted) {
+            return;
+        }
+
+        this.stdin.destroy();
+        this.emit('stop');
+        isStopped = true;
+        isStarted = false;
     }
 
 }
