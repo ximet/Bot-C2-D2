@@ -27,15 +27,16 @@ class CLI extends EventEmitter {
     }
 
     startListening () {
+        const self = this;
+
         if (isStarted === true) {
             return;
         }
 
-        this.stdin.on('data', function (text) {
+        this.stdin.on('SIGINT', function (text) {
             console.log('received data:', util.inspect(text));
             if (text === 'quit\n') {
-                console.log(this);
-                this.stopListening();
+                self.stopListening();
             }
         });
 
