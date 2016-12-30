@@ -1,0 +1,24 @@
+{
+  "name": "bot-c2-d2",
+  "version": "0.0.1",
+  "description": "Bot for everyday tasks",
+  "main": "app.js",
+  "dependencies": {
+    "twit": "^2.2.5",
+    "wordfilter": "^0.2.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ximet/Bot-C2-D2.git"
+  },
+  "author": "XIMet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ximet/Bot-C2-D2/issues"
+  },
+  "homepage": "https://github.com/ximet/Bot-C2-D2#readme"
+}
