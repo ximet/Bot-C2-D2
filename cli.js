@@ -1,10 +1,6 @@
 const EventEmitter = require('events').EventEmitter;
 const util = require('util');
-
-const done = () => {
-    console.log('Process Exit');
-    process.exit();
-};
+const { TwitterAddons } = require('./TwitterAddons/app.js');
 
 const memoryForProperty = 10;
 let isStarted = false;
@@ -28,6 +24,7 @@ class CLI extends EventEmitter {
 
     startListening () {
         const self = this;
+        const twitterObject = new TwitterAddons();
 
         if (isStarted === true) {
             return;
@@ -35,6 +32,9 @@ class CLI extends EventEmitter {
 
         this.stdin.on('data', function (text) {
             console.log('received data:', util.inspect(text));
+            if (text === 'twit please\n') {
+                twitterObject.tweetedTweet('Yohooo first tweet from bot c2-d2');
+            }
             if (text === 'quit\n') {
                 self.stopListening();
             }
