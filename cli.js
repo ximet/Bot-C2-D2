@@ -1,11 +1,21 @@
 const EventEmitter = require('events').EventEmitter;
 const util = require('util');
 const { TwitterAddons } = require('./TwitterAddons/app.js');
+const RL = require('./ReadLineInterface.js');
+
 
 const memoryForProperty = 10;
+
 let isStarted = false;
 let isStopped = true;
 
+const setQuetion = (questionMessage) => {
+    return new Promise((resolve, reject)=>{
+        RL.question(questionMessage, (answer) => {
+            resolve(answer);
+        })
+    });
+};
 
 class CLI extends EventEmitter {
     constructor() {
@@ -31,6 +41,7 @@ class CLI extends EventEmitter {
         }
 
         this.stdin.on('data', function (text) {
+            console.log(process.argv);
             console.log('received data:', util.inspect(text));
             if (text === 'twit please\n') {
                 twitterObject.tweetedTweet('Yohooo first tweet from bot c2-d2');
@@ -54,6 +65,11 @@ class CLI extends EventEmitter {
         this.emit('stop');
         isStopped = true;
         isStarted = false;
+    }
+
+    startWork () {
+        setQuetion('Start Work? ')
+            .then(result => result === 'y' ? console.log('OK, Let\'s go') : new EventException());
     }
 
 }

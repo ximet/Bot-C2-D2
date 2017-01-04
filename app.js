@@ -1,4 +1,4 @@
 const cliClass = require('./cli.js');
 const cli = new cliClass();
 
-cli.startListening();
+cli.startWork();
