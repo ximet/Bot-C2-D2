@@ -9,13 +9,41 @@ const memoryForProperty = 10;
 let isStarted = false;
 let isStopped = true;
 
-const setQuetion = (questionMessage) => {
+const receiveQuetion = (questionMessage) => {
     return new Promise((resolve, reject)=>{
         RL.question(questionMessage, (answer) => {
             resolve(answer);
         })
     });
 };
+
+const sendQuestion = (questionMessage) => {
+    return new Promise((resolve, reject) => {
+        resolve(questionMessage);
+    });
+};
+
+const sendQuestionToBrain = (cmd) => {
+    brainWork(cmd)
+        .then(result => result)
+        .catch(error => console.error(error));
+};
+
+const brainWork = (cmd) => {
+    return new Promise((resolve, reject) => {
+        if (cmd.indexOf("ping") > -1) {
+            resolve(console.log("Pongue"));
+        }
+
+        if (cmd.indexOf("destroy") > -1) {
+            resolve(process.exit(0));
+        }
+
+        reject('I don\'t understand you command... Please try again. ')
+    });
+
+};
+
 
 class CLI extends EventEmitter {
     constructor() {
@@ -67,9 +95,15 @@ class CLI extends EventEmitter {
         isStarted = false;
     }
 
+    commandUser () {
+        RL.on("line", (cmd) => {
+            sendQuestionToBrain(cmd);
+        });
+    }
+
     startWork () {
-        setQuetion('Start Work? ')
-            .then(result => result === 'y' ? console.log('OK, Let\'s go') : new EventException());
+        receiveQuetion('Start Work? ')
+            .then(result => result === 'y' ? this.commandUser() : new EventException());
     }
 
 }
