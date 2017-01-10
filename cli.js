@@ -23,28 +23,6 @@ const sendQuestion = (questionMessage) => {
     });
 };
 
-const sendQuestionToBrain = (cmd) => {
-    brainWork(cmd)
-        .then(result => result)
-        .catch(error => console.error(error));
-};
-
-const brainWork = (cmd) => {
-    return new Promise((resolve, reject) => {
-        switch (cmd) {
-            case 'ping': {
-                return resolve(console.log("Pongue"));
-            }
-            case 'destroy': {
-                return resolve(process.exit(0));
-            }
-        }
-
-        reject('I don\'t understand you command... Please try again. ')
-    });
-
-};
-
 
 class CLI extends EventEmitter {
     constructor() {
@@ -98,8 +76,41 @@ class CLI extends EventEmitter {
 
     commandUser () {
         RL.on("line", (cmd) => {
-            sendQuestionToBrain(cmd);
+            this.sendQuestionToBrain(cmd);
         });
+    }
+
+    sendQuestionToBrain (cmd) {
+        this.brainWork(cmd)
+            .then(result => result)
+            .catch(error => console.error(error));
+    }
+
+    brainWork (cmd) {
+        return new Promise((resolve, reject) => {
+            switch (cmd) {
+                case 'ping': {
+                    return resolve(console.log("Pongue"));
+                }
+                case 'destroy': {
+                    return resolve(process.exit(0));
+                }
+                case 'twit': {
+                    return receiveQuetion('Your message? ')
+                        .then(result => {
+                            if (result !== '') {
+                                const twitterObject = new TwitterAddons();
+
+                                twitterObject.tweetedTweet(result);
+                            }
+                        })
+                }
+                default: {
+                    return reject('I don\'t understand you command... Please try again. ');
+                }
+            }
+        });
+
     }
 
     startWork () {
