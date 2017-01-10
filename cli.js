@@ -31,12 +31,13 @@ const sendQuestionToBrain = (cmd) => {
 
 const brainWork = (cmd) => {
     return new Promise((resolve, reject) => {
-        if (cmd.indexOf("ping") > -1) {
-            resolve(console.log("Pongue"));
-        }
-
-        if (cmd.indexOf("destroy") > -1) {
-            resolve(process.exit(0));
+        switch (cmd) {
+            case 'ping': {
+                return resolve(console.log("Pongue"));
+            }
+            case 'destroy': {
+                return resolve(process.exit(0));
+            }
         }
 
         reject('I don\'t understand you command... Please try again. ')
