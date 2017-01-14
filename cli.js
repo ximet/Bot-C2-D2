@@ -51,12 +51,22 @@ const commandCurrentWeather = () => {
 
                 fetcher(urlValue)
                     .then(source => {
-                        console.log(source);
+                        const data = JSON.parse(source)
+                        const currentTemperature = getTemperature(data);
+
+                        console.log('Current temperature: ', currentTemperature);
                     });
             }
         })
 };
 
+const getTemperature = (data) => {
+   return kelvinToCelsius(data.main.temp);
+}
+
+const kelvinToCelsius = (value) => {
+    return value - 273.15;
+};
 
 class CLI extends EventEmitter {
     constructor() {
