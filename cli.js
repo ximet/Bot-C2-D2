@@ -51,7 +51,7 @@ const commandCurrentWeather = () => {
 
                 fetcher(urlValue)
                     .then(source => {
-                        const data = JSON.parse(source)
+                        const data = JSON.parse(source);
                         const currentTemperature = getTemperature(data);
 
                         console.log('Current temperature: ', currentTemperature);
@@ -62,10 +62,31 @@ const commandCurrentWeather = () => {
 
 const getTemperature = (data) => {
    return kelvinToCelsius(data.main.temp);
-}
+};
 
 const kelvinToCelsius = (value) => {
     return value - 273.15;
+};
+
+const commandForecastWeather = () => {
+    return receiveQuetion('Your city? ')
+        .then(city => {
+            if (city !== '') {
+
+
+                const urlValue = `http://api.openweathermap.org/data/2.5/forecast?APPID=${weatherAPIKey}&q=${encodeURIComponent(city)}&cnt=1`;
+
+                fetcher(urlValue)
+                    .then(source => {
+                        const data = JSON.parse(source);
+
+                        console.log(data);
+                        // const currentTemperature = getTemperature(data);
+                        //
+                        // console.log('Current temperature: ', currentTemperature);
+                    });
+            }
+        })
 };
 
 class CLI extends EventEmitter {
@@ -146,6 +167,9 @@ class CLI extends EventEmitter {
                 }
                 case 'weather': {
                     return commandCurrentWeather();
+                }
+                case 'forecast': {
+                    return commandForecastWeather();
                 }
                 default: {
                     return reject('I don\'t understand you command... Please try again. ');
