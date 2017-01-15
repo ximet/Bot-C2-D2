@@ -1,10 +1,11 @@
 const EventEmitter = require('events').EventEmitter;
 const util = require('util');
 const { TwitterAddons } = require('./TwitterAddons/app.js');
+const Weather = require('./WeatherAddons/Weather.js');
+
 const RL = require('./ReadLineInterface.js');
 const requestPromise = require('request-promise');
 const fetch = requestPromise.defaults({jar: true});
-const { weatherAPIKey } = require('./config.js');
 
 const fetcher = (options) => {
     return fetch(options);
@@ -37,54 +38,6 @@ const commandTwit = () => {
                 const twitterObject = new TwitterAddons();
 
                 twitterObject.tweetedTweet(result);
-            }
-        })
-};
-
-const commandCurrentWeather = () => {
-    return receiveQuetion('Your city? ')
-        .then(city => {
-            if (city !== '') {
-
-
-                const urlValue = `http://api.openweathermap.org/data/2.5/weather?APPID=${weatherAPIKey}&q=${encodeURIComponent(city)}&cnt=1`;
-
-                fetcher(urlValue)
-                    .then(source => {
-                        const data = JSON.parse(source);
-                        const currentTemperature = getTemperature(data);
-
-                        console.log('Current temperature: ', currentTemperature);
-                    });
-            }
-        })
-};
-
-const getTemperature = (data) => {
-   return kelvinToCelsius(data.main.temp);
-};
-
-const kelvinToCelsius = (value) => {
-    return value - 273.15;
-};
-
-const commandForecastWeather = () => {
-    return receiveQuetion('Your city? ')
-        .then(city => {
-            if (city !== '') {
-
-
-                const urlValue = `http://api.openweathermap.org/data/2.5/forecast?APPID=${weatherAPIKey}&q=${encodeURIComponent(city)}&cnt=1`;
-
-                fetcher(urlValue)
-                    .then(source => {
-                        const data = JSON.parse(source);
-
-                        console.log(data);
-                        // const currentTemperature = getTemperature(data);
-                        //
-                        // console.log('Current temperature: ', currentTemperature);
-                    });
             }
         })
 };
@@ -154,6 +107,8 @@ class CLI extends EventEmitter {
 
 
     brainWork (cmd) {
+        const weather = new Weather(receiveQuetion);
+
         return new Promise((resolve, reject) => {
             switch (cmd) {
                 case 'ping': {
@@ -166,10 +121,10 @@ class CLI extends EventEmitter {
                     return commandTwit();
                 }
                 case 'weather': {
-                    return commandCurrentWeather();
+                    return weather.commandCurrentWeather();
                 }
                 case 'forecast': {
-                    return commandForecastWeather();
+                    return weather.commandForecastWeather();
                 }
                 default: {
                     return reject('I don\'t understand you command... Please try again. ');
