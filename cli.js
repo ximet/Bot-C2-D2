@@ -42,6 +42,22 @@ const commandTwit = () => {
         })
 };
 
+const commandTranslate = () => {
+    return receiveQuetion('Your word? ')
+        .then(sourceText => {
+            if (sourceText !== '') {
+              const sourceLang = 'auto';
+              const targetLang = 'ru';
+              const urlValue = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(sourceText)}`;
+
+              fetcher(urlValue)
+                  .then(source => {
+                      console.log('Translate to : ', source);
+                  });
+            }
+        })
+};
+
 class CLI extends EventEmitter {
     constructor() {
         super();
@@ -125,6 +141,9 @@ class CLI extends EventEmitter {
                 }
                 case 'forecast': {
                     return weather.commandForecastWeather();
+                }
+                case 'translate': {
+                    return commandTranslate();
                 }
                 default: {
                     return reject('I don\'t understand you command... Please try again. ');
