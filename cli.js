@@ -48,11 +48,14 @@ const commandTranslate = () => {
             if (sourceText !== '') {
               const sourceLang = 'auto';
               const targetLang = 'ru';
-              const urlValue = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(sourceText)}`;
+              const urlValue = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(sourceText)}&cnt=1`;
 
               fetcher(urlValue)
                   .then(source => {
-                      console.log('Translate to : ', source);
+                      const translatedText = /\[\[\[\"\W+\"\,/g.exec(source);
+                      const clearTranslatedText = translatedText[0].split("[").join("").split("\"").join("").split(",").join("");
+
+                      console.log('Translate to : ', clearTranslatedText);
                   });
             }
         })
