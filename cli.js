@@ -46,11 +46,13 @@ const commandTranslate = (sourceLang, targetLang) => {
     return receiveQuetion('Your word? ')
         .then(sourceText => {
             if (sourceText !== '') {
-              const urlValue = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURI(sourceText)}&cnt=1`;
+              const urlValue = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${sourceText}&cnt=1`;
 
               fetcher(urlValue)
                   .then(source => {
+                    console.log('source Text Rus:', source);
                       const translatedText = /\[\[\[\"\W+\"\,/g.exec(source);
+                      console.log('Text Rus:', translatedText);
                       const clearTranslatedText = translatedText[0].split("[").join("").split("\"").join("").split(",").join("");
 
                       console.log('Translate to : ', clearTranslatedText);
@@ -66,7 +68,7 @@ const whichLanguageTranslate = () => {
         case 'en-ru': {
           return commandTranslate('en', 'ru');
         }
-        case 'en-ru': {
+        case 'ru-en': {
           return commandTranslate('ru', 'en');
         }
 
