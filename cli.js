@@ -177,8 +177,7 @@ class CLI extends EventEmitter {
     }
 
     startWork () {
-        receiveQuetion('Start Work? ')
-            .then(result => result === 'y' ? this.commandUser() : new EventException());
+        this.commandUser();
     }
 
 }
