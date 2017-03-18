@@ -68,10 +68,6 @@ const whichLanguageTranslate = () => {
         case 'en-ru': {
           return commandTranslate('en', 'ru');
         }
-        case 'ru-en': {
-          return commandTranslate('ru', 'en');
-        }
-
 
         default: {
           reject('HaveProblem');
@@ -79,7 +75,7 @@ const whichLanguageTranslate = () => {
 
       }
     })
-}
+};
 
 class CLI extends EventEmitter {
     constructor() {
@@ -97,8 +93,6 @@ class CLI extends EventEmitter {
             .then(result => result)
             .catch(error => console.error(error));
     }
-
-
 
     brainWork (cmd) {
         const weather = new Weather(receiveQuetion);
