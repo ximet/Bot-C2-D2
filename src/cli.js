@@ -1,5 +1,6 @@
 const EventEmitter = require('events').EventEmitter;
 const util = require('util');
+const Brain = require('./brain.js');
 const { TwitterAddons } = require('./TwitterAddons/app.js');
 const Weather = require('./WeatherAddons/Weather.js');
 
@@ -80,6 +81,7 @@ const whichLanguageTranslate = () => {
 class CLI extends EventEmitter {
     constructor() {
         super();
+        this.brain = new Brain();
     }
 
     commandUser () {
@@ -89,41 +91,12 @@ class CLI extends EventEmitter {
     }
 
     sendQuestionToBrain (cmd) {
-        this.brainWork(cmd)
+        this.brain.brainWork(cmd)
             .then(result => result)
             .catch(error => console.error(error));
     }
 
-    brainWork (cmd) {
-        const weather = new Weather(receiveQuetion);
 
-        return new Promise((resolve, reject) => {
-            switch (cmd) {
-                case 'ping': {
-                    return resolve(console.log("Pongue"));
-                }
-                case 'destroy': {
-                    return resolve(process.exit(0));
-                }
-                case 'twit': {
-                    return commandTwit();
-                }
-                case 'weather': {
-                    return weather.commandCurrentWeather();
-                }
-                case 'forecast': {
-                    return weather.commandForecastWeather();
-                }
-                case 'translate': {
-                    return whichLanguageTranslate();
-                }
-                default: {
-                    return reject('I don\'t understand you command... Please try again. ');
-                }
-            }
-        });
-
-    }
 
     startWork () {
         this.commandUser();

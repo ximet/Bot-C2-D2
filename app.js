@@ -1,4 +1,4 @@
-const cliClass = require('./cli.js');
-const cli = new cliClass();
+const cliInstance= require('./src/cli.js');
+const cli = new cliInstance();
 
 cli.startWork();
